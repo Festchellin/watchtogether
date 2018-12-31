@@ -60,7 +60,7 @@ public class JWTUtil {
 	 * @Description 验证token
 	 * @Date 3:43 PM 12/31/2018
 	 * @Param [userToken]
-	 * @throws Exception 
+	 * @throws Exception
 	 * @return com.auth0.jwt.interfaces.DecodedJWT
 	 */
 	public static DecodedJWT verifyToken(String userToken) throws Exception {

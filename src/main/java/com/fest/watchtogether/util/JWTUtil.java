@@ -3,6 +3,8 @@ package com.fest.watchtogether.util;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fest.watchtogether.entity.User;
@@ -55,13 +57,13 @@ public class JWTUtil {
 	}
 	
 	/**
+	 * @return com.auth0.jwt.interfaces.DecodedJWT
+	 * @throws Exception
 	 * @Author Festchellin
 	 * @Email festchellinme@gmail.com
 	 * @Description 验证token
 	 * @Date 3:43 PM 12/31/2018
 	 * @Param [userToken]
-	 * @throws Exception
-	 * @return com.auth0.jwt.interfaces.DecodedJWT
 	 */
 	public static DecodedJWT verifyToken(String userToken) throws Exception {
 		DecodedJWT jwt = null;
@@ -76,6 +78,7 @@ public class JWTUtil {
 		user.setAccount("123123123");
 		user.setAdminRole(true);
 		String userToken = generateUserToken(user);
+//		String userToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pblJvbGUiOnRydWUsImV4cCI6MTU0Njg0OTE0NSwiaWF0IjoxNTQ2MjQ0MzQ1LCJhY2NvdW50IjoiMTIzMTIzMTIzIn0.CAeEcc7YNwJvGasdasdasdasdasdasd";
 		System.out.println(userToken);
 		try {
 			DecodedJWT decodedJWT = verifyToken(userToken);
@@ -84,14 +87,18 @@ public class JWTUtil {
 			Map<String, Claim> claims = decodedJWT.getClaims();
 			claims.forEach((s, claim) -> {
 				if ("adminRole".equals(s))
-					System.out.println(s+":"+claim.asBoolean());
+					System.out.println(s + ":" + claim.asBoolean());
 				else if ("exp".equals(s))
-					System.out.println(s+":"+claim.asDate().toLocaleString());
+					System.out.println(s + ":" + claim.asDate().toLocaleString());
 				else if ("iat".equals(s))
-					System.out.println(s+":"+claim.asDate().toLocaleString());
+					System.out.println(s + ":" + claim.asDate().toLocaleString());
 				else if ("account".equals(s))
-					System.out.println(s+":"+claim.asString());
+					System.out.println(s + ":" + claim.asString());
 			});
+		} catch (TokenExpiredException e) {
+			System.out.println(e.getMessage());
+		} catch (SignatureVerificationException e) {
+			System.out.println(e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

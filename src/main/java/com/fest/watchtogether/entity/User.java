@@ -15,6 +15,7 @@ public class User implements Serializable {
 	private String name;
 	private String password;
 	private Boolean adminRole = false;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -53,5 +54,16 @@ public class User implements Serializable {
 	
 	public void setAdminRole(Boolean adminRole) {
 		this.adminRole = adminRole;
+	}
+	
+	@Override
+	public String toString() {
+		return "User{" +
+				"id=" + id +
+				", account='" + account + '\'' +
+				", name='" + name + '\'' +
+				", password='" + password + '\'' +
+				", adminRole=" + adminRole +
+				'}';
 	}
 }

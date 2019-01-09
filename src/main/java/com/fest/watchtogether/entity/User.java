@@ -10,17 +10,17 @@ import java.io.Serializable;
  * @Version 1.0
  */
 public class User implements Serializable {
-	private Integer id;
+	private Long id;
 	private String account;
 	private String name;
 	private String password;
 	private Boolean adminRole = false;
 	
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 	
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	

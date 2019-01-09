@@ -18,30 +18,40 @@ import java.util.Map;
  */
 @Service
 public class UserService implements IUserService {
+	private final UserDao userDao;
+	
 	@Autowired
-	private UserDao userDao;
+	public UserService(UserDao userDao) {
+		this.userDao = userDao;
+	}
+	
 	@Override
 	public Boolean save(User instance) {
-		return null;
+		return userDao.save(instance);
 	}
 	
 	@Override
 	public Boolean deleteById(Integer id) {
-		return null;
+		return userDao.deleteById(id);
 	}
 	
 	@Override
 	public Boolean update(User instance) {
-		return null;
+		return userDao.update(instance);
 	}
 	
 	@Override
-	public User getById(Integer id) {
-		return null;
+	public User getById(User user) {
+		return userDao.getById(user);
 	}
 	
 	@Override
 	public List getListByCondition(Map conditons) {
 		return userDao.getListByConditions(conditons);
+	}
+	
+	@Override
+	public User getByAccountAndPassword(String account, String password) {
+		return userDao.getByAccountAndPassword(account, password);
 	}
 }

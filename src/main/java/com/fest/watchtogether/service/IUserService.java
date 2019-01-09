@@ -10,4 +10,5 @@ import com.fest.watchtogether.entity.User;
  * @Version 1.0
  */
 public interface IUserService extends IBaseService<User> {
+	User getByAccountAndPassword(String account, String password);
 }

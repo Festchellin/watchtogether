@@ -1,5 +1,7 @@
 package com.fest.watchtogether.service;
 
+import com.fest.watchtogether.entity.User;
+
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +44,7 @@ public interface IBaseService<T> {
 	 * @Date 4:27 PM 12/31/2018
 	 * @Param [id]
 	 */
-	T getById(Integer id);
+	T getById(T instance);
 	
 	/**
 	 * @return java.util.List
@@ -52,5 +54,5 @@ public interface IBaseService<T> {
 	 * @Date 4:30 PM 12/31/2018
 	 * @Param [conditons]
 	 */
-	List getListByCondition(Map conditons);
+	List<T> getListByCondition(Map conditons);
 }

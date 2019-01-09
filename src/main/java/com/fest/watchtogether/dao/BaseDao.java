@@ -1,5 +1,7 @@
 package com.fest.watchtogether.dao;
 
+import com.fest.watchtogether.entity.User;
+
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +44,7 @@ public interface BaseDao<T> {
 	 * @Date 4:35 PM 12/31/2018
 	 * @Param [id]
 	 */
-	T getById(Integer id);
+	T getById(T instance);
 	
 	/**
 	 * @return java.util.List

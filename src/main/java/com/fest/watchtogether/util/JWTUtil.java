@@ -3,7 +3,6 @@ package com.fest.watchtogether.util;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -59,10 +58,10 @@ public class JWTUtil {
 	/**
 	 * @return com.auth0.jwt.interfaces.DecodedJWT
 	 * @throws Exception
-	 * @Author Festchellin
-	 * @Email festchellinme@gmail.com
-	 * @Description 验证token
-	 * @Date 3:43 PM 12/31/2018
+	 * @author Festchellin
+	 * @email festchellinme@gmail.com
+	 * @description
+	 * @date 9:35 AM 1/2/2019
 	 * @Param [userToken]
 	 */
 	public static DecodedJWT verifyToken(String userToken) throws Exception {
@@ -89,15 +88,13 @@ public class JWTUtil {
 				if ("adminRole".equals(s))
 					System.out.println(s + ":" + claim.asBoolean());
 				else if ("exp".equals(s))
-					System.out.println(s + ":" + claim.asDate().toLocaleString());
+					System.out.println(s + ":" + claim.asDate().toString());
 				else if ("iat".equals(s))
-					System.out.println(s + ":" + claim.asDate().toLocaleString());
+					System.out.println(s + ":" + claim.asDate().toString());
 				else if ("account".equals(s))
 					System.out.println(s + ":" + claim.asString());
 			});
 		} catch (TokenExpiredException e) {
-			System.out.println(e.getMessage());
-		} catch (SignatureVerificationException e) {
 			System.out.println(e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();

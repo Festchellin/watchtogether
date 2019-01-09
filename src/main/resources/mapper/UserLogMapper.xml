@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fest.watchtogether.dao.UserLogDao">
+    <resultMap id="userLogMap" type="UserLog">
+        <id column="id" property="id"/>
+        <result column="login_time" property="loginTime"/>
+        <result column="user_token" property="userToken"/>
+        <association property="user" column="user_id"  select="getUserUserId">
+        </association>
+    </resultMap>
+    <select id="getUserUserId" resultMap="com.fest.watchtogether.dao.UserDao.userMap">
+        SELECT id, account, name, admin_role
+        FROM tb_user
+        WHERE id = #{id}
+    </select>
+    <select id="getLatestLogByUser" resultMap="userLogMap">
+        SELECT * FROM tb_user_log
+        WHERE user_id = #{uid}
+        ORDER BY login_time DESC limit 1
+    </select>
+    <select id="getUserLogByToken" resultMap="userLogMap">
+        SELECT * FROM tb_user_log
+        WHERE user_token = #{userToken}
+    </select>
+    <insert id="save" parameterType="UserLog">
+        INSERT INTO tb_user_log(user_id,login_time,user_token)
+        values (#{user.id},#{loginTime},#{userToken})
+    </insert>
+</mapper>

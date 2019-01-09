@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fest.watchtogether.dao.UserDao">
+    <resultMap id="userMap" type="User">
+        <id column="id" property="id"/>
+        <result column="admin_role" property="adminRole"/>
+    </resultMap>
+
+    <select id="getById" resultMap="userMap">
+        SELECT id,name,account,admin_role FROM tb_user
+        <where>
+            <if test="id != null"> id = #{id}</if>
+            <if test="account != null"> AND account = #{account}</if>
+        </where>
+    </select>
+    <select id="getListByConditions" resultMap="userMap">
+        SELECT id,name,account,admin_role FROM tb_user
+        <where>
+            <if test="account != null">
+                account like CONCAT(CONCAT('%',#{account}),'%')
+            </if>
+            <if test="name != null">
+                AND name like CONCAT(CONCAT('%',#{name}),'%')
+            </if>
+            <if test="adminRole != null">
+                AND admin_role = #{adminRole}
+            </if>
+        </where>
+        LIMIT #{page},#{pageSize}
+    </select>
+
+    <select id="getByAccountAndPassword" resultMap="userMap">
+        SELECT id, name, account, admin_role
+        FROM tb_user
+        <where>
+            <if test="account != null">
+                account = #{account}
+            </if>
+            <if test="password != null">
+                AND password = #{password}
+            </if>
+        </where>
+    </select>
+
+    <insert id="save">
+        INSERT INTO tb_user(name,account,password,admin_role)
+        VALUES (#{name},#{account},#{password},#{adminRole})
+    </insert>
+    <update id="update" parameterType="User">
+        UPDATE tb_user
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="password != null">password = #{name},</if>
+            <if test="admin_role != null">admin_role = #{adminRole}</if>
+        </set>
+        <where>
+            <if test="id != null"> id = #{id}</if>
+             <if test="account != null"> OR account = #{account}</if>
+        </where>
+    </update>
+</mapper>

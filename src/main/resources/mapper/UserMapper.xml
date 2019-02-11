@@ -31,15 +31,7 @@
 
     <select id="getByAccountAndPassword" resultMap="userMap">
         SELECT id, name, account, admin_role
-        FROM tb_user
-        <where>
-            <if test="account != null">
-                account = #{account}
-            </if>
-            <if test="password != null">
-                AND password = #{password}
-            </if>
-        </where>
+        FROM tb_user WHERE account = #{account} AND password = #{password}
     </select>
 
     <insert id="save">
@@ -58,4 +50,9 @@
              <if test="account != null"> OR account = #{account}</if>
         </where>
     </update>
+
+    <delete id="deleteById">
+        DELETE FROM tb_user
+        WHERE id = #{id}
+    </delete>
 </mapper>

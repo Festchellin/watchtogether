@@ -2,7 +2,6 @@ package com.fest.watchtogether.dao;
 
 import com.fest.watchtogether.entity.UserLog;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Mapper

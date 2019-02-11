@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fest.watchtogether.dao.VideoDao">
+    <resultMap id="baseVideoMap" type="Video">
+        <id column="id" property="id"/>
+        <result column="release_time" property="releaseTime"/>
+        <association
+                property="author"
+                select="com.fest.watchtogether.dao.UserDao.getById"
+                column="author_id"/>
+    </resultMap>
+    <insert id="save" parameterType="Video">
+        INSERT INTO
+        tb_video(name , description, url,  release_time,author_id)
+        VALUES (#{name}, #{description}, #{url}, #{releaseTime}, #{author.id})
+    </insert>
+    <select id="getById" resultMap="baseVideoMap">
+        SELECT * FROM tb_video
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="name != null">
+                AND name = #{name}
+            </if>
+        </where>
+    </select>
+    <select id="getListByConditions" resultMap="baseVideoMap">
+        SELECT * FROM test.tb_video
+        <where>
+            <if test="name != null">
+                name LIKE CONCAT("%",CONCAT(#{name},"%"))
+            </if>
+            <if test="description != null">
+                AND description LIKE CONCAT("%",CONCAT(#{description},"%"))
+            </if>
+            <if test="release_time">
+                AND release_time = #{releaseTime}
+            </if>
+            <if test="author_id">
+                AND author_id = #{authorId}
+            </if>
+        </where>
+    </select>
+    <update id="update" parameterType="Video">
+        UPDATE tb_video
+        <set>
+            <if test="name != null">
+                name = #{name}
+            </if>
+            <if test="description != null">
+                AND description = #{description}
+            </if>
+            <if test="url != null">
+                AND url = #{url}
+            </if>
+            <if test="author != null">
+                AND author_id = #{author.id}
+            </if>
+            <if test="releaseTime != null">
+                AND release_time = #{releaseTime}
+            </if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+    <delete id="deleteById" >
+        DELETE FROM tb_vidoe
+        WHERE id = #{id}
+    </delete>
+</mapper>

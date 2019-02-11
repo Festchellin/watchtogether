@@ -15,18 +15,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @ClassName JWTUtil
+ * @ClassName JWTUtils
  * @Description
  * @Author Festchellin
  * @Date 12/31/2018  2:48 PM
  * @Version 1.0
  */
-public class JWTUtil {
+public class JWTUtils {
 	//	jwt 秘码
 	private static final String SECRET = "JKKLJOoasdlfj";
 	//	token过期时间 7 天
-	private static final int CALENDARFIELD = Calendar.DATE;
-	private static final int CALENDARFIELDINTERVAL = 7;
+	private static final int CALENDAR_FIELD = Calendar.DATE;
+	private static final int CALENDAR_FIELD_INTERVAL = 7;
+	
+	private JWTUtils() {
+	
+	}
 	
 	/**
 	 * @return java.lang.String
@@ -41,7 +45,7 @@ public class JWTUtil {
 		Date iatDate = new Date();
 		// expire time
 		Calendar nowTime = Calendar.getInstance();
-		nowTime.add(CALENDARFIELD, CALENDARFIELDINTERVAL);
+		nowTime.add(CALENDAR_FIELD, CALENDAR_FIELD_INTERVAL);
 		Date expiresDate = nowTime.getTime();
 		Map<String, Object> map = new HashMap<>();
 		map.put("alg", "HS256");
@@ -65,7 +69,7 @@ public class JWTUtil {
 	 * @Param [userToken]
 	 */
 	public static DecodedJWT verifyToken(String userToken) throws Exception {
-		DecodedJWT jwt = null;
+		DecodedJWT jwt;
 		JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SECRET)).build();
 		jwt = verifier.verify(userToken);
 		return jwt;

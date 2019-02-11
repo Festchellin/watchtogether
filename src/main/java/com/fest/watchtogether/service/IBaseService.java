@@ -1,7 +1,5 @@
 package com.fest.watchtogether.service;
 
-import com.fest.watchtogether.entity.User;
-
 import java.util.List;
 import java.util.Map;
 

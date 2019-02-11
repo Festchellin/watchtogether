@@ -1,37 +1,43 @@
 package com.fest.watchtogether.controller;
 
+import com.fest.watchtogether.dao.UserRepositoryMongo;
+import com.fest.watchtogether.entity.User;
 import com.fest.watchtogether.service.IUserService;
-import com.fest.watchtogether.util.AssembleUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.Resource;
 
-/**
- * @ClassName TestController
- * @Description
- * @Author Festchellin
- * @Date 12/31/2018  11:19 AM
- * @Version 1.0
- */
 @RestController
 public class TestController {
+	private final IUserService userService;
+	private final UserRepositoryMongo userRepository;
+	private final GridFsTemplate gridFsTemplate;
+	@Resource
+	private MongoDbFactory mongoDbFactory;
+	
 	@Autowired
-	private IUserService userService;
+	public TestController(IUserService userService, UserRepositoryMongo userRepository, GridFsTemplate gridFsTemplate) {
+		this.userService = userService;
+		this.userRepository = userRepository;
+		this.gridFsTemplate = gridFsTemplate;
+	}
+	
 	@GetMapping("/")
 	public Object index() {
-		List<AssembleUtil.Condition> otherConditionList = new ArrayList<>();
-		AssembleUtil.Condition condition = new AssembleUtil.Condition();
-		condition.setConditionName("account");
-		condition.setConditionValue("asd");
-		otherConditionList.add(condition);
-		Map<String, Object> conditions = AssembleUtil.assembleConditions(0, 5, otherConditionList);
-		List userList = userService.getListByCondition(conditions);
-		userList.forEach(user -> System.out.println(user) );
-		return "index";
+		User user = new User();
+		user.setId(1L);
+		user.setAccount("userInMongoDb");
+		user.setPassword("123123");
+		user.setAdminRole(false);
+		user.setName("zs");
+//		userRepository.save(user);
+//		List<User> users = userRepository.findAll();
+//		users.forEach(System.out::println);
+		return user;
 	}
+	
 }

@@ -1,16 +1,14 @@
 package com.fest.watchtogether.dao;
 
-import com.fest.watchtogether.entity.User;
-
 import java.util.List;
 import java.util.Map;
 
 public interface BaseDao<T> {
 	/**
 	 * @return java.lang.Boolean
-	 * @Author Festchellin
-	 * @Email festchellinme@gmail.com
-	 * @Description 通用：保存
+	 * @author Festchellin
+	 * @email festchellinme@gmail.com
+	 * @description 通用：保存
 	 * @Date 4:33 PM 12/31/2018
 	 * @Param [instance]
 	 */

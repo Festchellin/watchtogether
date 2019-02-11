@@ -5,26 +5,20 @@ import com.fest.watchtogether.entity.User;
 import com.fest.watchtogether.entity.UserLog;
 import com.fest.watchtogether.service.IUserLogService;
 import com.fest.watchtogether.service.IUserService;
-import com.fest.watchtogether.util.AssembleUtil;
-import com.fest.watchtogether.util.JWTUtil;
+import com.fest.watchtogether.util.AssembleUtils;
+import com.fest.watchtogether.util.Condition;
+import com.fest.watchtogether.util.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-/**
- * @author Festchellin
- * @version 1.0
- * @description
- * @date 1/1/2019  2:18 PM
- */
 @RestController
 @RequestMapping("/user")
-public class UserController implements Serializable {
+public class UserController implements Serializable, IBaseController<User> {
 	private final IUserService userService;
 	private final IUserLogService userLogService;
 	
@@ -36,16 +30,9 @@ public class UserController implements Serializable {
 		this.userLogService = userLogService;
 	}
 	
-	/**
-	 * @return java.lang.Object
-	 * @author Festchellin
-	 * @email festchellinme@gmail.com
-	 * @description user sign up required name account and password fields.
-	 * @date 2:23 PM 1/2/2019
-	 * @Param [user]
-	 */
+	@Override
 	@PostMapping("/signUp")
-	public Object save(User user) {
+	public Object save(@RequestBody User user) {
 		response.clear();
 		Boolean userSaved = userService.save(user);
 		if (userSaved) {
@@ -53,72 +40,79 @@ public class UserController implements Serializable {
 			UserLog userLog = assembleUserLog(user);
 			Boolean userLogSaved = userLogService.save(userLog);
 			if (userLogSaved) {
-				response = AssembleUtil
+				response = AssembleUtils
 						.assembleResponse("User  sign up successfully!", true,
 								assembleUserAndToken(user, userLog.getUserToken()));
 			} else {
-				response = AssembleUtil.assembleResponse("user sign up successfully, but sign in failed", false, null);
+				response = AssembleUtils.assembleResponse("user sign up successfully, but sign in failed", false, null);
 			}
 		} else {
-			response = AssembleUtil.assembleResponse("user sign up failed", false, null);
+			response = AssembleUtils.assembleResponse("user sign up failed", false, null);
 		}
 		return response;
 	}
 	
-	/**
-	 * @return java.lang.Object
-	 * @author Festchellin
-	 * @email festchellinme@gmail.com
-	 * @description user sign in with account and password.
-	 * @date 2:24 PM 1/2/2019
-	 * @Param [user]
-	 */
+	@Override
+	public Object deleteById(Long id) {
+		return null;
+	}
+	
 	@PostMapping("/signIn")
-	public Object signIn(User user) {
+	public Object signIn(@RequestBody User user) {
 		response.clear();
-		user = userService.getByAccountAndPassword(user.getAccount(), user.getPassword());
-		UserLog userLog = assembleUserLog(user);
-		Boolean isSignIn = userLogService.save(userLog);
-		if (isSignIn) {
-			response = AssembleUtil
-					.assembleResponse("User sign In successfully!", true,
-							assembleUserAndToken(user, userLog.getUserToken()));
+		try {
+			user = userService.getByAccountAndPassword(user.getAccount(), user.getPassword());
+			UserLog userLog = assembleUserLog(user);
+			Boolean isSignIn = userLogService.save(userLog);
+			if (isSignIn) {
+				response = AssembleUtils
+						.assembleResponse("User sign In successfully!", true,
+								assembleUserAndToken(user, userLog.getUserToken()));
+			} else {
+				response = AssembleUtils
+						.assembleResponse("Account or Password is wrong,we can't find such user!", false, null);
+			}
+		} catch (Exception e) {
+			response = AssembleUtils
+					.assembleResponse("Account or Password is wrong,we can't find such user!!", false, null);
 		}
 		return response;
 	}
 	
-	/**
-	 * @return java.lang.Object
-	 * @author Festchellin
-	 * @email festchellinme@gmail.com
-	 * @description user sign in with userToken
-	 * @date 2:25 PM 1/2/2019
-	 * @Param [userToken]
-	 */
 	@PostMapping("/signInWithToken")
 	public Object signInWithToken(String userToken) {
 		response.clear();
 		try {
-			DecodedJWT decodedJWT = JWTUtil.verifyToken(userToken);
+			DecodedJWT decodedJWT = JWTUtils.verifyToken(userToken);
 			decodedJWT.getClaims().forEach((name, value) -> System.out.println(name + ":" + value));
 			UserLog userLog = userLogService.getUserLogByUserToken(userToken);
 			User user = userLog.getUser();
-			response = AssembleUtil.assembleResponse("User sign in successfully", true,
+			response = AssembleUtils.assembleResponse("User sign in successfully", true,
 					assembleUserAndToken(user, userToken));
 		} catch (Exception e) {
-			response = AssembleUtil.assembleResponse(e.getMessage(), false, null);
+			response = AssembleUtils.assembleResponse(e.getMessage(), false, null);
 		}
 		return response;
 	}
 	
-	/**
-	 * @return java.lang.Object
-	 * @author Festchellin
-	 * @email festchellinme@gmail.com
-	 * @description Get the user object based on its's
-	 * @date 3:02 PM 1/2/2019
-	 * @Param [id]
-	 */
+	@Override
+	@PutMapping
+	public Object update(User instance) {
+		response.clear();
+		Boolean updated = userService.update(instance);
+		if (updated) {
+			instance = userService.getById(instance);
+			UserLog userLog = userLogService.getLatestLogByUser(instance.getId());
+			response = AssembleUtils.assembleResponse("update successfully", true,
+					assembleUserAndToken(instance, userLog.getUserToken())
+			);
+		} else {
+			response = AssembleUtils.assembleResponse("update faild", false, null);
+		}
+		return response;
+	}
+	
+	@Override
 	@GetMapping("/{id}")
 	public Object getById(@PathVariable Long id) {
 		response.clear();
@@ -126,76 +120,27 @@ public class UserController implements Serializable {
 		user.setId(id);
 		user = userService.getById(user);
 		if (user != null) {
-			Map<String,Object> data = new HashMap<>();
+			Map<String, Object> data = new HashMap<>();
 			UserLog userLog = userLogService.getLatestLogByUser(user.getId());
 			data.put("user", user);
 			data.put("userLog", userLog);
-			response = AssembleUtil.assembleResponse("get user successfully", true, data);
+			response = AssembleUtils.assembleResponse("get user successfully", true, data);
 		} else {
-			response = AssembleUtil.assembleResponse("no such user", false, null);
+			response = AssembleUtils.assembleResponse("no such user", false, null);
 		}
 		return response;
 	}
 	
-	/**
-	 * @author Festchellin
-	 * @email festchellinme@gmail.com
-	 * @description update user information [name, password, adminRole]
-	 * @date 3:53 PM 1/2/2019
-	 * @Param [user]
-	 * @return java.lang.Object
-	 */
-	@PutMapping
-	public Object update(User user) {
-		response.clear();
-		Boolean updated = userService.update(user);
-		if (updated) {
-			user = userService.getById(user);
-			UserLog userLog = userLogService.getLatestLogByUser(user.getId());
-			response = AssembleUtil.assembleResponse("update successfully", true,
-					assembleUserAndToken(user, userLog.getUserToken())
-			);
-		} else {
-			response = AssembleUtil.assembleResponse("update faild", false, null);
-		}
-		return response;
-	}
-	
-	/**
-	 * @author Festchellin
-	 * @email festchellinme@gmail.com
-	 * @description get the user information list according to the conditions without password
-	 * @date 3:55 PM 1/2/2019
-	 * @Param [conditionList, page, pageSize]
-	 * @return java.lang.Object
-	 */
+	@Override
 	@GetMapping
-	public Object getListByCondition(List<AssembleUtil.Condition> conditionList,
-	                                 @RequestParam(defaultValue = "0") Integer page,
-	                                 @RequestParam(defaultValue = "5") Integer pageSize) {
-		response.clear();
-		Map<String, Object> conditions = AssembleUtil.assembleConditions(page, pageSize, conditionList);
-		List<User> userList = userService.getListByCondition(conditions);
-		Map<String, Object> data = new HashMap<>();
-		data.put("userList", userList);
-		if (userList != null && userList.size() > 0) {
-			response = AssembleUtil.assembleResponse("get information successfully", true, data);
-		} else {
-			response = AssembleUtil.assembleResponse("no result found by conditions you gave", false, null);
-		}
-		return response;
+	public Object getListByConditions(Condition condition,
+	                                  @RequestParam(defaultValue = "0") Integer page,
+	                                  @RequestParam(defaultValue = "5") Integer pageSize) {
+		return AssembleUtils.assembleListResponse(response, condition, page - 1 >= 0 ? page - 1 : 0, pageSize, "userList", userService);
 	}
 	
-	/**
-	 * @return com.fest.watchtogether.entity.UserLog
-	 * @author Festchellin
-	 * @email festchellinme@gmail.com
-	 * @description assemble a new userLog infomation with user (required account)
-	 * @date 2:26 PM 1/2/2019
-	 * @Param [user]
-	 */
 	private UserLog assembleUserLog(User user) {
-		String userToken = JWTUtil.generateUserToken(user);
+		String userToken = JWTUtils.generateUserToken(user);
 		UserLog userLog = new UserLog();
 		userLog.setUser(user);
 		userLog.setLoginTime(new Date(System.currentTimeMillis()));
@@ -203,15 +148,6 @@ public class UserController implements Serializable {
 		return userLog;
 	}
 	
-	/**
-	 * @return java.util.Map<java.lang.String , java.lang.Object>
-	 * @author Festchellin
-	 * @email festchellinme@gmail.com
-	 * @description assemble the infomation if user sign in successfully.
-	 * include the user infomation and userToken for next time sign in
-	 * @date 2:27 PM 1/2/2019
-	 * @Param [user, userToken]
-	 */
 	private Map<String, Object> assembleUserAndToken(User user, String userToken) {
 		Map<String, Object> data = new HashMap<>();
 		data.put("user", user);

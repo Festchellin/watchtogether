@@ -5,15 +5,13 @@ mybatis:
   mapper-locations: mapper/*Mapper.xml
 spring:
   datasource:
-    url: jdbc:mysql://39.108.184.215:3306/test?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&useSSL=false
-    #    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&useSSL=false
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&useSSL=false
     driver-class-name: com.mysql.jdbc.Driver
     password: 123456
     username: root
   data:
     mongodb:
-      #      uri: mongodb+srv://fest:7uxpe44x9bszxm5X@azure-hk-iluhu.azure.mongodb.net/test?retryWrites=true
-      uri: mongodb://39.108.184.215:27017/test?retryWrites=true
+           uri: mongodb+srv://fest:7uxpe44x9bszxm5X@azure-hk-iluhu.azure.mongodb.net/test?retryWrites=true
   resources:
     static-locations: classpath:static/,file:static/
   servlet:

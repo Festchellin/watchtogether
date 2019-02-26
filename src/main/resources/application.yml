@@ -12,8 +12,8 @@ spring:
     username: root
   data:
     mongodb:
-      #      uri: mongodb+srv://fest:7uxpe44x9bszxm5X@azure-hk-iluhu.azure.mongodb.net/test?retryWrites=true
-      uri: mongodb://39.108.184.215:27017/test?retryWrites=true
+      uri: mongodb+srv://fest:7uxpe44x9bszxm5X@azure-hk-iluhu.azure.mongodb.net/test?retryWrites=true
+  #        uri: mongodb://39.108.184.215:27017/test?retryWrites=true
   resources:
     static-locations: classpath:static/,file:static/
   servlet:

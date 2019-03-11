@@ -1,20 +1,11 @@
 package com.fest.watchtogether.util;
 
-import com.fest.watchtogether.entity.User;
 import com.fest.watchtogether.service.IBaseService;
-import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @ClassName AssembleUtils
- * @Description 组装类，用于组装数据
- * @Author Festchellin
- * @Date 1/1/2019  9:24 AM
- * @Version 1.0
- */
 public class AssembleUtils {
 	private AssembleUtils() {
 	}
@@ -60,11 +51,4 @@ public class AssembleUtils {
 		return response;
 	}
 	
-	@Test
-	public void testAssembleResponse() {
-		Map<String, Object> data = new HashMap<>();
-		data.put("user", new User());
-		Map<String, Object> response = assembleResponse("OK", true, data);
-		response.forEach((key, value) -> System.out.println(key + ":" + value));
-	}
 }

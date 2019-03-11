@@ -5,7 +5,7 @@
         <id column="id" property="id"/>
         <result column="login_time" property="loginTime"/>
         <result column="user_token" property="userToken"/>
-        <association property="user" column="user_id"  select="getUserUserId">
+        <association property="user" column="user_id" select="getUserUserId">
         </association>
     </resultMap>
     <select id="getUserUserId" resultMap="com.fest.watchtogether.dao.UserDao.userMap">
@@ -14,16 +14,40 @@
         WHERE id = #{id}
     </select>
     <select id="getLatestLogByUser" resultMap="userLogMap">
-        SELECT * FROM tb_user_log
+        SELECT *
+        FROM tb_user_log
         WHERE user_id = #{uid}
-        ORDER BY login_time DESC limit 1
+        ORDER BY login_time DESC
+        limit 1
     </select>
     <select id="getUserLogByToken" resultMap="userLogMap">
-        SELECT * FROM tb_user_log
+        SELECT *
+        FROM tb_user_log
         WHERE user_token = #{userToken}
     </select>
     <insert id="save" parameterType="UserLog">
-        INSERT INTO tb_user_log(user_id,login_time,user_token)
-        values (#{user.id},#{loginTime},#{userToken})
+        INSERT INTO tb_user_log(user_id, login_time, user_token)
+        values (#{user.id}, #{loginTime}, #{userToken})
     </insert>
+    <select id="getListByConditions" resultMap="userLogMap">
+        SELECT * FROM tb_user_log
+        <where>
+            <if test="user != null">
+                user_id = #{user.id}
+            </if>
+            <if test="userToken != null">
+                AND user_token = #{userToken}
+            </if>
+            <if test="loginTime != null">
+                AND login_time = #{loginTime}
+            </if>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+        </where>
+    </select>
+    <delete id="deleteById">
+        DELETE FROM tb_user_log
+        WHERE id = #{id}
+    </delete>
 </mapper>

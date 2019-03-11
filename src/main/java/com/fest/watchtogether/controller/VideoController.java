@@ -11,13 +11,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author Festchellin
- * @version 1.0
- * @className VideoController
- * @description
- * @date 1/21/2019  10:49 AM
- */
 @RestController
 @RequestMapping("/video")
 public class VideoController implements Serializable, IBaseController<Video> {

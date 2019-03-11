@@ -1,20 +1,14 @@
 package com.fest.watchtogether.entity;
 
 
+import com.fest.watchtogether.entity.flag.Voting;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @author Festchellin
- * @version 1.0
- * @className Video
- * @description
- * @date 1/17/2019  2:20 PM
- */
 @Data
-public class Video implements Serializable {
+public class Video implements Serializable, Voting {
 	private Integer id;
 	private String name;
 	private String description;

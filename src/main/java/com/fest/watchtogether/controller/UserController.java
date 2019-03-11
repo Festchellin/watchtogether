@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -23,6 +24,7 @@ public class UserController implements Serializable, IBaseController<User> {
 	private final IUserLogService userLogService;
 	
 	private Map<String, Object> response = new HashMap<>();
+	private Map<String, Object> data = new HashMap<>();
 	
 	@Autowired
 	public UserController(IUserService userService, IUserLogService userLogService) {
@@ -31,12 +33,25 @@ public class UserController implements Serializable, IBaseController<User> {
 	}
 	
 	@Override
+	@DeleteMapping("{id}")
+	public Object deleteById(@PathVariable Long id) {
+		response.clear();
+		try {
+			Boolean delete = userService.deleteById(id.intValue());
+			response = AssembleUtils.assembleResponse(delete ? "delete" : "do not delete successfully", delete, null);
+		} catch (Exception e) {
+			response = AssembleUtils.assembleResponse("do not delete successfully caused by:" + e.getMessage(), false, null);
+		}
+		return response;
+	}
+	
+	@Override
 	@PostMapping("/signUp")
 	public Object save(@RequestBody User user) {
 		response.clear();
 		Boolean userSaved = userService.save(user);
 		if (userSaved) {
-			user = userService.getByAccountAndPassword(user.getAccount(), user.getPassword());
+			user = userService.getByAccountAndPassword(user.getAccount(), user.getPassword(), user.getAdminRole());
 			UserLog userLog = assembleUserLog(user);
 			Boolean userLogSaved = userLogService.save(userLog);
 			if (userLogSaved) {
@@ -52,16 +67,11 @@ public class UserController implements Serializable, IBaseController<User> {
 		return response;
 	}
 	
-	@Override
-	public Object deleteById(Long id) {
-		return null;
-	}
-	
 	@PostMapping("/signIn")
 	public Object signIn(@RequestBody User user) {
 		response.clear();
 		try {
-			user = userService.getByAccountAndPassword(user.getAccount(), user.getPassword());
+			user = userService.getByAccountAndPassword(user.getAccount(), user.getPassword(), user.getAdminRole());
 			UserLog userLog = assembleUserLog(user);
 			Boolean isSignIn = userLogService.save(userLog);
 			if (isSignIn) {
@@ -80,8 +90,9 @@ public class UserController implements Serializable, IBaseController<User> {
 	}
 	
 	@PostMapping("/signInWithToken")
-	public Object signInWithToken(String userToken) {
+	public Object signInWithToken(@RequestBody String userToken) {
 		response.clear();
+		System.out.println(userToken);
 		try {
 			DecodedJWT decodedJWT = JWTUtils.verifyToken(userToken);
 			decodedJWT.getClaims().forEach((name, value) -> System.out.println(name + ":" + value));
@@ -97,17 +108,21 @@ public class UserController implements Serializable, IBaseController<User> {
 	
 	@Override
 	@PutMapping
-	public Object update(User instance) {
+	public Object update(@RequestBody User instance) {
 		response.clear();
-		Boolean updated = userService.update(instance);
-		if (updated) {
-			instance = userService.getById(instance);
-			UserLog userLog = userLogService.getLatestLogByUser(instance.getId());
-			response = AssembleUtils.assembleResponse("update successfully", true,
-					assembleUserAndToken(instance, userLog.getUserToken())
-			);
-		} else {
-			response = AssembleUtils.assembleResponse("update faild", false, null);
+		try {
+			Boolean updated = userService.update(instance);
+			if (updated) {
+				instance = userService.getById(instance);
+				UserLog userLog = userLogService.getLatestLogByUser(instance.getId());
+				response = AssembleUtils.assembleResponse("update successfully", true,
+						assembleUserAndToken(instance, userLog.getUserToken())
+				);
+			} else {
+				response = AssembleUtils.assembleResponse("update failed", false, null);
+			}
+		} catch (Exception e) {
+			response = AssembleUtils.assembleResponse("update failed caused by:" + e.getMessage(), false, null);
 		}
 		return response;
 	}
@@ -122,7 +137,6 @@ public class UserController implements Serializable, IBaseController<User> {
 		if (user != null) {
 			Map<String, Object> data = new HashMap<>();
 			UserLog userLog = userLogService.getLatestLogByUser(user.getId());
-			data.put("user", user);
 			data.put("userLog", userLog);
 			response = AssembleUtils.assembleResponse("get user successfully", true, data);
 		} else {
@@ -137,6 +151,25 @@ public class UserController implements Serializable, IBaseController<User> {
 	                                  @RequestParam(defaultValue = "0") Integer page,
 	                                  @RequestParam(defaultValue = "5") Integer pageSize) {
 		return AssembleUtils.assembleListResponse(response, condition, page - 1 >= 0 ? page - 1 : 0, pageSize, "userList", userService);
+	}
+	
+	@GetMapping("/exist")
+	public Object validateUserExist(String account) {
+		response.clear();
+		Condition condition = new Condition();
+		condition.setConditionName("account");
+		condition.setConditionValue(account);
+		Map<String, Object> conditions = AssembleUtils.assembleConditions(0, 100, condition);
+		try {
+			List<User> userList = userService.getUserListByConditions(conditions);
+			Boolean exist = userList != null && userList.size() > 0;
+			data.clear();
+			data.put("exist", exist);
+			response = AssembleUtils.assembleResponse(exist ? "user exist" : "user not exist", true, data);
+		} catch (Exception e) {
+			response = AssembleUtils.assembleResponse("query error caused by:" + e.getMessage(), false, null);
+		}
+		return response;
 	}
 	
 	private UserLog assembleUserLog(User user) {

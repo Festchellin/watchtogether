@@ -11,13 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-/**
- * @author Festchellin
- * @version 1.0
- * @className MongodbDownloadCallable
- * @description
- * @date 1/15/2019  3:28 PM
- */
 @Setter
 @Getter
 @AllArgsConstructor

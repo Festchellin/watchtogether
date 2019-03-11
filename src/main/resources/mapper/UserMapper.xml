@@ -9,8 +9,8 @@
     <select id="getById" resultMap="userMap">
         SELECT id,name,account,admin_role FROM tb_user
         <where>
-            <if test="id != null"> id = #{id}</if>
-            <if test="account != null"> AND account = #{account}</if>
+            <if test="id != null">id = #{id}</if>
+            <if test="account != null">AND account = #{account}</if>
         </where>
     </select>
     <select id="getListByConditions" resultMap="userMap">
@@ -31,28 +31,41 @@
 
     <select id="getByAccountAndPassword" resultMap="userMap">
         SELECT id, name, account, admin_role
-        FROM tb_user WHERE account = #{account} AND password = #{password}
+        FROM tb_user
+        WHERE account = #{account}
+          AND password = #{password}
+          AND admin_role = #{adminRole}
+    </select>
+    <select id="getUserListByConditions" resultMap="userMap">
+        SELECT id, name, account, admin_role
+        FROM tb_user
+        <where>
+            <if test="account != null">
+                account = #{account}
+            </if>
+        </where>
     </select>
 
     <insert id="save">
-        INSERT INTO tb_user(name,account,password,admin_role)
-        VALUES (#{name},#{account},#{password},#{adminRole})
+        INSERT INTO tb_user(name, account, password, admin_role)
+        VALUES (#{name}, #{account}, #{password}, #{adminRole})
     </insert>
-    <update id="update" parameterType="User">
+    <update id="update">
         UPDATE tb_user
         <set>
             <if test="name != null">name = #{name},</if>
-            <if test="password != null">password = #{name},</if>
-            <if test="admin_role != null">admin_role = #{adminRole}</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="adminRole != null">admin_role = #{adminRole}</if>
         </set>
         <where>
-            <if test="id != null"> id = #{id}</if>
-             <if test="account != null"> OR account = #{account}</if>
+            <if test="id != null">id = #{id}</if>
+            <if test="account != null">OR account = #{account}</if>
         </where>
     </update>
 
     <delete id="deleteById">
-        DELETE FROM tb_user
+        DELETE
+        FROM tb_user
         WHERE id = #{id}
     </delete>
 </mapper>

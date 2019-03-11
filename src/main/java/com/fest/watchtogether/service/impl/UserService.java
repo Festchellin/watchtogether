@@ -9,13 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @ClassName UserService
- * @Description
- * @Author Festchellin
- * @Date 12/31/2018  4:26 PM
- * @Version 1.0
- */
 @Service
 public class UserService implements IUserService {
 	private final UserDao userDao;
@@ -46,12 +39,18 @@ public class UserService implements IUserService {
 	}
 	
 	@Override
-	public List getListByCondition(Map conditons) {
-		return userDao.getListByConditions(conditons);
+	public List getListByCondition(Map conditions) {
+		return userDao.getListByConditions(conditions);
 	}
 	
 	@Override
-	public User getByAccountAndPassword(String account, String password) {
-		return userDao.getByAccountAndPassword(account, password);
+	public User getByAccountAndPassword(String account, String password, Boolean adminRole) {
+		return userDao.getByAccountAndPassword(account, password, adminRole);
 	}
+	
+	@Override
+	public List getUserListByConditions(Map conditions) {
+		return userDao.getUserListByConditions(conditions);
+	}
+	
 }

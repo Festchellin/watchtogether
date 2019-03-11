@@ -9,13 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author Festchellin
- * @version 1.0
- * @className VideoService
- * @description
- * @date 1/20/2019  3:27 PM
- */
 @Service
 public class VideoService implements IVideoService {
 	private final VideoDao videoDao;
@@ -46,7 +39,7 @@ public class VideoService implements IVideoService {
 	}
 	
 	@Override
-	public List<Video> getListByCondition(Map conditons) {
-		return videoDao.getListByConditions(conditons);
+	public List<Video> getListByCondition(Map conditions) {
+		return videoDao.getListByConditions(conditions);
 	}
 }

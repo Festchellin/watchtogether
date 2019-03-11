@@ -5,13 +5,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * @ClassName User
- * @Description
- * @Author Festchellin
- * @Date 12/31/2018  1:21 PM
- * @Version 1.0
- */
 @Data
 public class User implements Serializable {
 	private Long id;

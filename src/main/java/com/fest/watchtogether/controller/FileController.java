@@ -15,13 +15,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-/**
- * @author Festchellin
- * @version 1.0
- * @class FileControlller
- * @description
- * @date 1/17/2019  2:01 PM
- */
 @RestController
 public class FileController {
 	private final Map<String, Object> response = new HashMap<>();

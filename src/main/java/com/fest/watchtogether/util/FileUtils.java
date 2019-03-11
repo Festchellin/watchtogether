@@ -12,26 +12,10 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author Festchellin
- * @version 1.0
- * @className FileUtils
- * @description
- * @date 1/16/2019  2:29 PM
- */
 public class FileUtils implements Serializable {
 	private FileUtils() {
 	}
 	
-	/**
-	 * @return java.lang.Object
-	 * @throws
-	 * @author Festchellin
-	 * @email festchellinme@gmail.com
-	 * @description 默认存储在static目录下的 files目录
-	 * @date 4:12 PM 1/17/2019
-	 * @Param [file]
-	 */
 	public static String saveFile(MultipartFile file) throws IOException {
 		Map<String, Object> result = new HashMap<>();
 		String filePath;

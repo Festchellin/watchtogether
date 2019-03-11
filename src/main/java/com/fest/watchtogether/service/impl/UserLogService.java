@@ -35,7 +35,7 @@ public class UserLogService implements IUserLogService {
 	
 	@Override
 	public Boolean deleteById(Integer id) {
-		return null;
+		return userLogDao.deleteById(id);
 	}
 	
 	@Override
@@ -49,7 +49,7 @@ public class UserLogService implements IUserLogService {
 	}
 	
 	@Override
-	public List getListByCondition(Map conditons) {
-		return null;
+	public List getListByCondition(Map conditions) {
+		return userLogDao.getListByConditions(conditions);
 	}
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fest.watchtogether.dao.TableDao">
+    <resultMap id="baseTable" type="Table">
+        <id column="id" property="id"/>
+        <result property="tbName" column="tb_name"/>
+        <result property="tbComment" column="tb_comment" javaType="string"/>
+        <result property="navigateLink" column="navigate_link"/>
+    </resultMap>
+    <select id="getAllTables" resultMap="baseTable">
+        SELECT *
+        FROM test.tb_table;
+    </select>
+    <select id="getAllUserTables" resultMap="baseTable">
+        SELECT *
+        FROM test.tb_table
+        WHERE type = 1;
+    </select>
+    <delete id="deleteById">
+        DELETE FROM tb_table
+        WHERE id = #{id}
+    </delete>
+    <update id="update">
+        UPDATE tb_table
+            <set>
+                <if test="tbComment != null">
+                    tb_comment = #{tbComment}
+                </if>
+            </set>
+        <where>
+            id = #{id} AND tb_name = #{tbName}
+        </where>
+    </update>
+    <insert id="save">
+        INSERT INTO tb_table(tb_name,tb_comment,navigate_link,type)
+        VALUES (#{tbName},#{tbComment},#{navigateLink},#{type})
+    </insert>
+</mapper>

@@ -4,15 +4,15 @@
     <resultMap id="baseVideoMap" type="Video">
         <id column="id" property="id"/>
         <result column="release_time" property="releaseTime"/>
+        <result column="video_pic_url" property="videoPicUrl"/>
         <association
                 property="author"
                 select="com.fest.watchtogether.dao.UserDao.getById"
                 column="author_id"/>
     </resultMap>
     <insert id="save" parameterType="Video">
-        INSERT INTO
-        tb_video(name , description, url,  release_time,author_id)
-        VALUES (#{name}, #{description}, #{url}, #{releaseTime}, #{author.id})
+        INSERT INTO tb_video(name, description, url, release_time, author_id, video_pic_url)
+        VALUES (#{name}, #{description}, #{url}, #{releaseTime}, #{author.id}, #{videoPicUrl})
     </insert>
     <select id="getById" resultMap="baseVideoMap">
         SELECT * FROM tb_video
@@ -49,24 +49,28 @@
                 name = #{name}
             </if>
             <if test="description != null">
-                AND description = #{description}
+                ,description = #{description}
             </if>
             <if test="url != null">
-                AND url = #{url}
+                ,url = #{url}
             </if>
             <if test="author != null">
-                AND author_id = #{author.id}
+                ,author_id = #{author.id}
             </if>
             <if test="releaseTime != null">
                 AND release_time = #{releaseTime}
+            </if>
+            <if test="videoPicUrl != null">
+                ,video_pic_url = #{videoPicUrl}
             </if>
         </set>
         <where>
             id = #{id}
         </where>
     </update>
-    <delete id="deleteById" >
-        DELETE FROM tb_vidoe
+    <delete id="deleteById">
+        DELETE
+        FROM tb_vidoe
         WHERE id = #{id}
     </delete>
 </mapper>

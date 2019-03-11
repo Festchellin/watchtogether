@@ -19,13 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * @author Festchellin
- * @version 1.0
- * @className FileUploadUtil
- * @description
- * @date 2019-01-14  10:44 AM
- */
 @Component
 public class MongoDBGridFSUtils {
 	private static MongoDbFactory mongoDbFactory;

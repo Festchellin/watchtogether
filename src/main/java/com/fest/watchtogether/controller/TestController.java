@@ -28,6 +28,7 @@ public class TestController {
 	
 	@GetMapping("/")
 	public Object index() {
+		System.out.println("Index");
 		User user = new User();
 		user.setId(1L);
 		user.setAccount("userInMongoDb");

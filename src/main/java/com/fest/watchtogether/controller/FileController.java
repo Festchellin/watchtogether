@@ -29,7 +29,7 @@ public class FileController {
 			try {
 				String serverLocalPath = FileUtils.saveFile(file);
 				success = true;
-				response.put("msg", "Video Saved");
+				response.put("msg", "Saved");
 				response.put("url", serverLocalPath);
 			} catch (IOException e) {
 				response.put("msg", e.getMessage());

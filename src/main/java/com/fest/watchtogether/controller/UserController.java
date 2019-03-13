@@ -2,7 +2,9 @@ package com.fest.watchtogether.controller;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fest.watchtogether.entity.User;
+import com.fest.watchtogether.entity.UserInfo;
 import com.fest.watchtogether.entity.UserLog;
+import com.fest.watchtogether.service.IUserInfoService;
 import com.fest.watchtogether.service.IUserLogService;
 import com.fest.watchtogether.service.IUserService;
 import com.fest.watchtogether.util.AssembleUtils;
@@ -22,7 +24,8 @@ import java.util.Map;
 public class UserController implements Serializable, IBaseController<User> {
 	private final IUserService userService;
 	private final IUserLogService userLogService;
-	
+	@Autowired
+	private IUserInfoService userInfoService;
 	private Map<String, Object> response = new HashMap<>();
 	private Map<String, Object> data = new HashMap<>();
 	
@@ -52,6 +55,11 @@ public class UserController implements Serializable, IBaseController<User> {
 		Boolean userSaved = userService.save(user);
 		if (userSaved) {
 			user = userService.getByAccountAndPassword(user.getAccount(), user.getPassword(), user.getAdminRole());
+			UserInfo userInfo = new UserInfo();
+			userInfo.setUser(user);
+			userInfo.setRegisterDate(new Date(System.currentTimeMillis()));
+			userInfo.setLastModifyTime(new Date(System.currentTimeMillis()));
+			userInfoService.save(userInfo);
 			UserLog userLog = assembleUserLog(user);
 			Boolean userLogSaved = userLogService.save(userLog);
 			if (userLogSaved) {

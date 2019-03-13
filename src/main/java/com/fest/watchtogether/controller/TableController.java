@@ -13,7 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/table")
-public class TableController implements IBaseController<Table>{
+public class TableController implements IBaseController<Table> {
 	private final TableService tableService;
 	private Map<String, Object> response = new HashMap<>();
 	private Map<String, Object> data = new HashMap<>();
@@ -29,7 +29,17 @@ public class TableController implements IBaseController<Table>{
 		data.clear();
 		List<Table> tables = null;
 		try {
-			tables = type == 2 ? tableService.getAllTables() : tableService.getAllUserTables();
+			switch (type) {
+				case 1:
+					tables = tableService.getAllUserTables();
+					break;
+				case 2:
+					tables = tableService.getAdminMenu();
+					break;
+				case 3:
+					tables = tableService.getAllTables();
+					break;
+			}
 			data.put("tables", tables);
 			response = AssembleUtils.assembleResponse("get data successfully", true, data);
 		} catch (Exception e) {
@@ -50,8 +60,8 @@ public class TableController implements IBaseController<Table>{
 		try {
 			Boolean save = tableService.save(instance);
 			response = AssembleUtils.assembleResponse(save ? "saved" : "do not save", save, null);
-		}catch (Exception e){
-			response = AssembleUtils.assembleResponse("do not save caused by:"+e.getMessage(), false, null);
+		} catch (Exception e) {
+			response = AssembleUtils.assembleResponse("do not save caused by:" + e.getMessage(), false, null);
 		}
 		return response;
 	}
@@ -63,8 +73,8 @@ public class TableController implements IBaseController<Table>{
 		try {
 			Boolean delete = tableService.deleteById(id.intValue());
 			response = AssembleUtils.assembleResponse(delete ? "deleted" : "do not delete", delete, null);
-		}catch (Exception e){
-			response = AssembleUtils.assembleResponse("do not delete caused by "+e.getMessage(),false,null);
+		} catch (Exception e) {
+			response = AssembleUtils.assembleResponse("do not delete caused by " + e.getMessage(), false, null);
 		}
 		return response;
 	}
@@ -76,8 +86,8 @@ public class TableController implements IBaseController<Table>{
 		try {
 			Boolean update = tableService.update(instance);
 			response = AssembleUtils.assembleResponse(update ? "updated" : "do not update", update, null);
-		}catch (Exception e){
-			response = AssembleUtils.assembleResponse("do not update caused by "+ e.getMessage(),false,null);
+		} catch (Exception e) {
+			response = AssembleUtils.assembleResponse("do not update caused by " + e.getMessage(), false, null);
 		}
 		return response;
 	}

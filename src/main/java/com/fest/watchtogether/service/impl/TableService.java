@@ -29,6 +29,11 @@ public class TableService implements ITableService {
 	}
 	
 	@Override
+	public List<Table> getAdminMenu() {
+		return tableDao.getAdminMenu();
+	}
+	
+	@Override
 	public Boolean save(Table instance) {
 		return tableDao.save(instance);
 	}

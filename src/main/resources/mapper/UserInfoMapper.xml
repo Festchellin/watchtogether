@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fest.watchtogether.dao.UserInfoDao">
+    <resultMap id="baseUserInfo" type="UserInfo">
+        <id column="id" property="id"/>
+        <result column="register_date" property="registerDate"/>
+        <result column="last_modify_time" property="lastModifyTime"/>
+        <result column="phone_number" property="phoneNumber"/>
+        <association property="user" column="u_id" select="getUserById"/>
+    </resultMap>
+    <select id="getUserById" resultMap="com.fest.watchtogether.dao.UserDao.userMap">
+        SELECT id, account, name, admin_role
+        FROM tb_user
+        WHERE id = #{id}
+    </select>
+    <insert id="save">
+        INSERT INTO tb_user_info(u_id, register_date, last_modify_time, email, phone_number, avatar)
+        VALUES (#{user.id},
+                #{registerDate},
+                #{lastModifyTime},
+                #{email},
+                #{phoneNumber},
+                #{avatar})
+    </insert>
+    <delete id="deleteById">
+        DELETE
+        FROM tb_user_info
+        WHERE id = #{id}
+    </delete>
+    <select id="getById" resultMap="baseUserInfo">
+        SELECT *
+        FROM tb_user_info
+        WHERE u_id = #{user.id}
+    </select>
+    <select id="getListByConditions" resultMap="baseUserInfo">
+        SELECT * FROM tb_user_info
+        <where>
+            <if test="id != null">id = #{id}</if>
+            <if test="user != null">u_id = #{user.id}</if>
+            <if test="email != null">email =#{email}</if>
+            <if test="phoneNumber != null">phone_umber = #{phoneNumber}</if>
+        </where>
+    </select>
+    <update id="update">
+        UPDATE tb_user_info
+        <set>
+            <if test="email != null">email =#{email},</if>
+            <if test="phoneNumber != null">phone_number = #{phoneNumber},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            last_modify_time = CURRENT_TIMESTAMP()
+        </set>
+    </update>
+</mapper>

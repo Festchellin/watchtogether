@@ -50,8 +50,8 @@ public class ValidateUtils {
 	@Test
 	public void test() {
 		System.out.println(isNullOrEmpty(null));
-		System.out.println(isNullOrEmpty(""));
-		System.out.println((new ArrayList<>()));
-		System.out.println((new HashMap<>().put("aaa", "aaa")));
+		System.out.println(isNullOrEmpty("a"));
+		System.out.println(isNullOrEmpty(new ArrayList<>()));
+		System.out.println(isNullOrEmpty(new HashMap<>().put("aaa", 1)));
 	}
 }

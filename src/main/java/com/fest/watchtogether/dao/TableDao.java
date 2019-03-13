@@ -8,7 +8,10 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface TableDao extends BaseDao<Table>{
+public interface TableDao extends BaseDao<Table> {
 	List<Table> getAllTables();
+	
 	List<Table> getAllUserTables();
+	
+	List<Table> getAdminMenu();
 }

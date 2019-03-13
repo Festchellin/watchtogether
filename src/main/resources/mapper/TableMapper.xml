@@ -16,23 +16,35 @@
         FROM test.tb_table
         WHERE type = 1;
     </select>
+    <select id="getAdminMenu" resultMap="baseTable">
+        SELECT *
+        FROM test.tb_table
+        WHERE type = 2;
+    </select>
     <delete id="deleteById">
-        DELETE FROM tb_table
+        DELETE
+        FROM tb_table
         WHERE id = #{id}
     </delete>
     <update id="update">
         UPDATE tb_table
-            <set>
-                <if test="tbComment != null">
-                    tb_comment = #{tbComment}
-                </if>
-            </set>
+        <set>
+            <if test="tbComment != null">
+                tb_comment = #{tbComment}
+            </if>
+            <if test="tbName != null">
+                , tb_name = #{tbName}
+            </if>
+            <if test="navigateLink != null">
+                , navigate_link = #{navigateLink}
+            </if>
+        </set>
         <where>
-            id = #{id} AND tb_name = #{tbName}
+            id = #{id}
         </where>
     </update>
     <insert id="save">
-        INSERT INTO tb_table(tb_name,tb_comment,navigate_link,type)
-        VALUES (#{tbName},#{tbComment},#{navigateLink},#{type})
+        INSERT INTO tb_table(tb_name, tb_comment, navigate_link, type)
+        VALUES (#{tbName}, #{tbComment}, #{navigateLink}, #{type})
     </insert>
 </mapper>

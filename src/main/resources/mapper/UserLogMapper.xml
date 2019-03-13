@@ -47,7 +47,8 @@
         </where>
     </select>
     <delete id="deleteById">
-        DELETE FROM tb_user_log
+        DELETE
+        FROM tb_user_log
         WHERE id = #{id}
     </delete>
 </mapper>

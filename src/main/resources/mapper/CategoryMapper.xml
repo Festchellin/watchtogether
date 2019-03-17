@@ -30,6 +30,7 @@
                 AND last_modify_time = #{lastModifyTime}
             </if>
         </where>
+        LIMIT #{page},#{pageSize}
     </select>
     <update id="update">
         UPDATE tb_category

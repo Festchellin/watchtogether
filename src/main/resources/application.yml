@@ -1,5 +1,6 @@
 server:
   port: 8888
+  connection-timeout: 60000
 mybatis:
   type-aliases-package: com.fest.watchtogether.entity
   mapper-locations: mapper/*Mapper.xml
@@ -15,12 +16,15 @@ spring:
   #      uri: mongodb+srv://fest:7uxpe44x9bszxm5X@azure-hk-iluhu.azure.mongodb.net/test?retryWrites=true
   #        uri: mongodb://39.108.184.215:27017/test?retryWrites=true
   resources:
-    static-locations: classpath:static/,file:static/
+    static-locations: classpath:static/,file:static/,file:${custom.file.path}
   servlet:
     multipart:
-      max-file-size: 2048MB
+      max-file-size: 64MB
       enabled: true
-      max-request-size: 2048MB
+      max-request-size: 20480MB
 logging:
   level:
     com.fest.watchtogether.dao: DEBUG
+custom:
+  file:
+    path: E:/mvodResouces/

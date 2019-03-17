@@ -40,6 +40,7 @@
             <if test="email != null">email =#{email}</if>
             <if test="phoneNumber != null">phone_umber = #{phoneNumber}</if>
         </where>
+        LIMIT #{page},#{pageSize}
     </select>
     <update id="update">
         UPDATE tb_user_info

@@ -41,12 +41,16 @@ public class AssembleUtils {
 		response.clear();
 		Map<String, Object> data = new HashMap<>();
 		Map<String, Object> conditions = AssembleUtils.assembleConditions(page, pageSize, condition);
-		List list = service.getListByCondition(conditions);
-		data.put(dataKey, list);
-		if (list != null && list.size() > 0) {
-			response = AssembleUtils.assembleResponse("get information successfully", true, data);
-		} else {
-			response = AssembleUtils.assembleResponse("no result found by conditions you gave", false, null);
+		try {
+			List list = service.getListByCondition(conditions);
+			data.put(dataKey, list);
+			if (list != null && list.size() > 0) {
+				response = AssembleUtils.assembleResponse("get information successfully", true, data);
+			} else {
+				response = AssembleUtils.assembleResponse("no result found by conditions you gave", false, null);
+			}
+		} catch (Exception e) {
+			response = assembleResponse("no result found by condition you gave caused by:" + e.getMessage(), false, null);
 		}
 		return response;
 	}

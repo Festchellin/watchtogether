@@ -1,93 +1,66 @@
 package com.fest.watchtogether.controller;
 
 import com.fest.watchtogether.entity.Video;
-import com.fest.watchtogether.service.IVideoService;
+import com.fest.watchtogether.service.IBaseService;
+import com.fest.watchtogether.service.impl.VideoService;
 import com.fest.watchtogether.util.AssembleUtils;
 import com.fest.watchtogether.util.Condition;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/video")
-public class VideoController implements Serializable, IBaseController<Video> {
-	private final IVideoService videoService;
-	private Map<String, Object> response = new HashMap<>();
-	
-	@Autowired
-	public VideoController(IVideoService videoService) {
-		this.videoService = videoService;
+public class VideoController extends BaseController<Video> {
+	public VideoController(IBaseService<Video> baseService) {
+		super(baseService);
 	}
 	
-	@GetMapping("/{id}")
+	@Override
+	@GetMapping("{id}")
 	public Object getById(@PathVariable Long id) {
-		response.clear();
-		
-		return response;
+		return null;
 	}
 	
 	@Override
 	@PostMapping
-	public Object save(Video instance) {
-		response.clear();
-		try {
-			Boolean saved = videoService.save(instance);
-			if (saved) {
-				response.put("msg", "saved successfully");
-			}
-			response.put("success", saved);
-		} catch (Exception e) {
-			response.put("msg", e.getMessage());
-		}
-		return response;
+	public Object save(@RequestBody Video instance) {
+		instance.setReleaseTime(new Date(System.currentTimeMillis()));
+		return super.save(instance);
 	}
 	
 	@Override
-	@DeleteMapping
-	public Object deleteById(Long id) {
-		response.clear();
-		try {
-			Boolean deleted = videoService.deleteById(id.intValue());
-			if (deleted) {
-				response.put("msg", "deleted successfully");
-			} else {
-				response.put("msg", "delete failed");
-			}
-			response.put("success", deleted);
-		} catch (Exception e) {
-			response.put("msg", e.getMessage());
-			response.put("success", false);
-		}
-		return response;
+	@DeleteMapping("{id}")
+	public Object deleteById(@PathVariable Long id) {
+		return super.deleteById(id);
 	}
 	
 	@Override
 	@PutMapping
-	public Object update(Video instance) {
-		response.clear();
-		try {
-			Boolean updated = videoService.update(instance);
-			if (updated) {
-				response.put("msg", "deleted successfully");
-			} else {
-				response.put("msg", "delete failed");
-			}
-			response.put("success", updated);
-		} catch (Exception e) {
-			response.put("msg", e.getMessage());
-			response.put("success", false);
-		}
-		return response;
+	public Object update(@RequestBody Video instance) {
+		return super.update(instance);
 	}
 	
 	@Override
 	@GetMapping
-	public Object getListByConditions(Condition condition,
-	                                  @RequestParam(defaultValue = "0") Integer page,
-	                                  @RequestParam(defaultValue = "5") Integer pageSize) {
-		return AssembleUtils.assembleListResponse(response, condition, page - 1 >= 0 ? page - 1 : 0, pageSize, "videoList", videoService);
+	public Object getListByConditions(Condition condition, @RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "5") Integer pageSize) {
+		return super.getListByConditions(condition, page, pageSize);
+	}
+	
+	@GetMapping("/user/{id}")
+	public Object getListByUser(@PathVariable Long id) {
+		response.clear();
+		data.clear();
+		try {
+			List<Video> list = ((VideoService) baseService).getListByUserId(id.intValue());
+			Boolean success = list != null;
+			data.put("list", list);
+			response = AssembleUtils.assembleResponse(success ? "get data successfully" : "get data failed", success, success ? data : null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response = AssembleUtils.assembleResponse("get data failed caused by:" + e.getMessage(), false, null);
+		}
+		return response;
 	}
 }

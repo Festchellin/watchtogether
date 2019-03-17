@@ -42,4 +42,8 @@ public class VideoService implements IVideoService {
 	public List<Video> getListByCondition(Map conditions) {
 		return videoDao.getListByConditions(conditions);
 	}
+	
+	public List<Video> getListByUserId(Integer id) {
+		return videoDao.getListByUserId(id);
+	}
 }

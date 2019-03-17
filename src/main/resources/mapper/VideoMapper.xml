@@ -7,12 +7,17 @@
         <result column="video_pic_url" property="videoPicUrl"/>
         <association
                 property="author"
-                select="com.fest.watchtogether.dao.UserDao.getById"
+                select="getUserById"
                 column="author_id"/>
     </resultMap>
+    <select id="getUserById" resultMap="com.fest.watchtogether.dao.UserDao.userMap">
+        SELECT id, name, account, admin_role
+        FROM tb_user
+        WHERE id = #{id}
+    </select>
     <insert id="save" parameterType="Video">
-        INSERT INTO tb_video(name, description, url, release_time, author_id, video_pic_url)
-        VALUES (#{name}, #{description}, #{url}, #{releaseTime}, #{author.id}, #{videoPicUrl})
+        INSERT INTO tb_video(name, description, url, release_time, author_id, poster)
+        VALUES (#{name}, #{description}, #{url}, #{releaseTime}, #{author.id}, #{poster})
     </insert>
     <select id="getById" resultMap="baseVideoMap">
         SELECT * FROM tb_video
@@ -34,13 +39,19 @@
             <if test="description != null">
                 AND description LIKE CONCAT("%",CONCAT(#{description},"%"))
             </if>
-            <if test="release_time">
+            <if test="releaseTime != null">
                 AND release_time = #{releaseTime}
             </if>
-            <if test="author_id">
-                AND author_id = #{authorId}
+            <if test="author != null and author.id != null">
+                AND author_id = #{author.id}
             </if>
         </where>
+        LIMIT #{page},#{pageSize}
+    </select>
+    <select id="getListByUserId" resultMap="baseVideoMap">
+        SELECT *
+        FROM test.tb_video
+        WHERE author_id = #{id}
     </select>
     <update id="update" parameterType="Video">
         UPDATE tb_video
@@ -58,10 +69,10 @@
                 ,author_id = #{author.id}
             </if>
             <if test="releaseTime != null">
-                AND release_time = #{releaseTime}
+                , release_time = #{releaseTime}
             </if>
-            <if test="videoPicUrl != null">
-                ,video_pic_url = #{videoPicUrl}
+            <if test="poster != null">
+                ,poster = #{poster}
             </if>
         </set>
         <where>
@@ -70,7 +81,7 @@
     </update>
     <delete id="deleteById">
         DELETE
-        FROM tb_vidoe
+        FROM tb_video
         WHERE id = #{id}
     </delete>
 </mapper>

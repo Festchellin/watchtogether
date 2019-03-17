@@ -45,6 +45,7 @@
                 AND id = #{id}
             </if>
         </where>
+        LIMIT #{page},#{pageSize}
     </select>
     <delete id="deleteById">
         DELETE

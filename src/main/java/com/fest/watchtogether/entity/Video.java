@@ -15,4 +15,5 @@ public class Video implements Serializable, Voting {
 	private User author;
 	private Date releaseTime;
 	private String url;
+	private String poster;
 }

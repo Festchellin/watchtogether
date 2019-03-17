@@ -60,7 +60,7 @@ public abstract class BaseController<T> implements IBaseController<T> {
 		Map<String, Object> conditions = AssembleUtils.assembleConditions(page, pageSize, condition);
 		try {
 			List<T> list = baseService.getListByCondition(conditions);
-			Boolean success = list != null && list.size() > 0;
+			Boolean success = list != null;
 			data.put("list", list);
 			response = AssembleUtils.assembleResponse(success ? "get data successfully" : "do not get date", success, success ? data : null);
 		} catch (Exception e) {

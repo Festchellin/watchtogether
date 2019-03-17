@@ -3,16 +3,15 @@ package com.fest.watchtogether.util;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
+import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-
 public class FileUtils implements Serializable {
+	public static final String filePath = "E:/mvodResources";
 	private FileUtils() {
 	}
 	
@@ -30,6 +29,39 @@ public class FileUtils implements Serializable {
 	
 	public static String getClassPath() throws FileNotFoundException {
 		return ResourceUtils.getURL("classpath:").getPath();
+	}
+	
+	public static void saveSlice(MultipartFile slice, String slicesDir, String signal, int sliceNum) throws IOException {
+		File tempFile = new File(slicesDir, signal + sliceNum + ".part");
+		if (!tempFile.getParentFile().exists()) tempFile.getParentFile().mkdirs();
+		RandomAccessFile randomAccessFile = null;
+		randomAccessFile = new RandomAccessFile(tempFile, "rw");
+		randomAccessFile.write(slice.getBytes());
+		randomAccessFile.close();
+	}
+	
+	public static void mergeSlices(String slicesDir, String dest, String signal) throws IOException {
+		File parent = new File(slicesDir);
+		File[] files = parent.listFiles();
+		FileChannel outChannel = new FileOutputStream(dest, true).getChannel();
+		FileChannel inChannel = null;
+		for (int i = 0; i < files.length; i++) {
+			File file = new File(parent, signal + i + ".part");
+			inChannel = new FileInputStream(file).getChannel();
+			inChannel.transferTo(0, inChannel.size(), outChannel);
+			inChannel.close();
+		}
+	}
+	
+	public static boolean deleteSlices(String slicesDir) {
+		File dir = new File(slicesDir);
+		File[] files = dir.listFiles();
+		for (File file : files) {
+			if (!file.delete()) {
+				return false;
+			}
+		}
+		return dir.delete();
 	}
 	
 }

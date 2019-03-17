@@ -45,7 +45,7 @@ public class VoteController implements IBaseController<Vote> {
 	
 	@PostMapping
 	@Override
-	public Object save(Vote instance) {
+	public Object save(@RequestBody Vote instance) {
 		response.clear();
 		instance.setVoteTime(new Date(System.currentTimeMillis()));
 		try {

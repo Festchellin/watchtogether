@@ -10,7 +10,8 @@ create table tb_category
 )
 comment '视频分类表';
 
-INSERT INTO test.tb_category (id, name, last_modify_time) VALUES (1, 'action video', '2019-02-18 06:40:39');
+INSERT INTO test.tb_category (id, name, last_modify_time)
+VALUES (1, 'action videos', '2019-02-18 06:40:39');
 INSERT INTO test.tb_category (id, name, last_modify_time) VALUES (2, 'comedy', '2019-02-20 06:54:50');
 create table tb_user
 (

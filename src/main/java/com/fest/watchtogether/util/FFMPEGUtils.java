@@ -23,16 +23,11 @@ public class FFMPEGUtils {
 		List<String> command = new ArrayList<>();
 		command.add("ffmpeg");
 		command.add("-y");
-//		command.add("-hwaccel");
-//		command.add("cuvid");
-//		command.add("-c:v");
-//		command.add("libx264");
 		command.add("-i");
 		command.add(fileAbsolutePath);
 		command.add("-c:v");
-//		command.add("h264_nvenc");
 		command.add("libx264");
-		command.add(fileName + ".mp4");
+		command.add(desc + "/" + fileName + ".mp4");
 		ProcessBuilder processBuilder = new ProcessBuilder(command);
 		logger.info("start convert");
 		Process process = processBuilder.start();

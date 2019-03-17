@@ -27,4 +27,4 @@ logging:
     com.fest.watchtogether.dao: DEBUG
 custom:
   file:
-    path: E:/mvodResouces/
+    path: E:/mvodResources/

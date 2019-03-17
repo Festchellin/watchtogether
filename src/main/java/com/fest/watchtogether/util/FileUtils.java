@@ -42,8 +42,12 @@ public class FileUtils implements Serializable {
 	
 	public static void mergeSlices(String slicesDir, String dest, String signal) throws IOException {
 		File parent = new File(slicesDir);
+		File destFile = new File(dest);
+		if (!destFile.getParentFile().exists()) {
+			destFile.getParentFile().mkdirs();
+		}
 		File[] files = parent.listFiles();
-		FileChannel outChannel = new FileOutputStream(dest, true).getChannel();
+		FileChannel outChannel = new FileOutputStream(destFile, true).getChannel();
 		FileChannel inChannel = null;
 		for (int i = 0; i < files.length; i++) {
 			File file = new File(parent, signal + i + ".part");
@@ -62,6 +66,10 @@ public class FileUtils implements Serializable {
 			}
 		}
 		return dir.delete();
+	}
+	
+	public static boolean deleteFile(File file) {
+		return file.delete();
 	}
 	
 }

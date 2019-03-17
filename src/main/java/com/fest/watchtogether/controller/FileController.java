@@ -2,6 +2,7 @@ package com.fest.watchtogether.controller;
 
 import com.fest.watchtogether.entity.Response;
 import com.fest.watchtogether.entity.UploadFile;
+import com.fest.watchtogether.util.FFMPEGUtils;
 import com.fest.watchtogether.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,11 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -26,14 +27,15 @@ public class FileController {
 	private final Response res = new Response();
 	private final String signal = "/chunk_";
 	private final Map<String, Object> response = new HashMap<>();
-	private String FILE_PATH = FileUtils.filePath;
+	//	private String FILE_PATH = FileUtils.filePath;
+	private String FILE_PATH = System.getenv("MVOD_RESOURCE_HOME");
 	private Logger logger = LoggerFactory.getLogger(FileController.class);
 	private String VIDEO_PATH = FILE_PATH + "/upload/videos";
 	private String IMAGE_PATH = FILE_PATH + "/upload/images";
 	private String VIDEO_TEMP_PATH = FILE_PATH + "/upload/videos/temp";
 	private String IMAGE_TEMP_PATH = FILE_PATH + "/upload/images/temp";
 	
-	public FileController() throws FileNotFoundException {
+	public FileController() {
 	}
 	
 	//	@PostMapping("/upload")
@@ -68,13 +70,16 @@ public class FileController {
 		
 		String filename = uploadFile.getFilename();
 		String md5 = uploadFile.getMd5();
-		String slicesDir = VIDEO_TEMP_PATH + "/" + md5;
+		Date date = new Date();
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		String time = format.format(date);
+		String slicesDir = VIDEO_TEMP_PATH + "/" + time + "/" + md5;
 		try {
 			FileUtils.saveSlice(slice, slicesDir, signal, currentSlice);
 			if (currentSlice == totalSlices) {
 				logger.info("merge slice");
 				Thread thread = new Thread(() -> {
-					String dest = VIDEO_PATH + "/" + filename;
+					String dest = VIDEO_PATH + "/" + time + "/" + filename;
 					System.out.println(dest);
 					try {
 						FileUtils.mergeSlices(slicesDir, dest, signal);
@@ -82,11 +87,24 @@ public class FileController {
 						e.printStackTrace();
 					}
 					FileUtils.deleteSlices(slicesDir);
+					File destFile = new File(dest);
+					boolean success = false;
+					if (FFMPEGUtils.canCanvert(destFile) && !FFMPEGUtils.isMP4(destFile)) {
+						try {
+							success = FFMPEGUtils.convertVideo2MP4(destFile, destFile.getParent());
+						} catch (IOException | InterruptedException e) {
+							e.printStackTrace();
+						} finally {
+							if (success) {
+								FileUtils.deleteFile(destFile);
+							}
+						}
+					}
 				});
 				thread.start();
 				res.setSuccess(true);
 				res.setMessage("Save");
-				res.getData().put("url", "/api/upload/videos/" + filename);
+				res.getData().put("url", "/upload/videos/" + time + "/" + filename.substring(0, filename.lastIndexOf(".") + 1) + "mp4");
 			} else {
 				res.setSuccess(true);
 				res.setMessage("Current slice saved");
@@ -104,27 +122,36 @@ public class FileController {
 		
 		MultipartFile slice = uploadFile.getFile();
 		
-		String filename = uploadFile.getFilename();
-		String md5 = uploadFile.getMd5();
-		
-		int totalSlices = uploadFile.getTotalSlices();
 		int currentSlice = uploadFile.getCurrentSlice();
+		int totalSlices = uploadFile.getTotalSlices();
 		
-		String slicesDir = IMAGE_TEMP_PATH + "/" + md5;
-		String dest = IMAGE_PATH + "/" + filename;
+		String filename;
+		filename = uploadFile.getFilename();
+		String md5 = uploadFile.getMd5();
+		Date date = new Date();
+		SimpleDateFormat format;
+		format = new SimpleDateFormat("yyyyMMdd");
+		String time = format.format(date);
+		String slicesDir = IMAGE_TEMP_PATH + "/" + time + "/" + md5;
 		try {
-			logger.info("start save slice");
 			FileUtils.saveSlice(slice, slicesDir, signal, currentSlice);
 			if (currentSlice == totalSlices) {
 				logger.info("merge slice");
-				FileUtils.mergeSlices(slicesDir, dest, signal);
-				logger.info("delete slice");
-				FileUtils.deleteSlices(slicesDir);
+				Thread thread = new Thread(() -> {
+					String dest = IMAGE_PATH + "/" + time + "/" + filename;
+					try {
+						FileUtils.mergeSlices(slicesDir, dest, signal);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					FileUtils.deleteSlices(slicesDir);
+				});
+				thread.start();
 				res.setSuccess(true);
 				res.setMessage("Save");
-				res.getData().put("url", "/api/upload/images/" + filename);
+				res.getData().put("url", "/upload/images/" + time + "/" + filename);
 			} else {
-				res.setSuccess(false);
+				res.setSuccess(true);
 				res.setMessage("Current slice saved");
 			}
 		} catch (IOException e) {

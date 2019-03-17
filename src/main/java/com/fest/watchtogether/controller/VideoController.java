@@ -20,7 +20,19 @@ public class VideoController extends BaseController<Video> {
 	@Override
 	@GetMapping("{id}")
 	public Object getById(@PathVariable Long id) {
-		return null;
+		response.clear();
+		data.clear();
+		Video video = new Video();
+		video.setId(id.intValue());
+		try {
+			Video videoById = baseService.getById(video);
+			boolean success = videoById != null && videoById.getUrl() != null;
+			data.put("video", videoById);
+			response = AssembleUtils.assembleResponse(success ? "success" : "failed", success, success ? data : null);
+		} catch (Exception e) {
+			response = AssembleUtils.assembleResponse("failed caused by:" + e.getMessage(), false, null);
+		}
+		return response;
 	}
 	
 	@Override

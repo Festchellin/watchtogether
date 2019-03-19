@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,15 +28,15 @@ public class FileController {
 	private final Response res = new Response();
 	private final String signal = "/chunk_";
 	private final Map<String, Object> response = new HashMap<>();
-	//	private String FILE_PATH = FileUtils.filePath;
-	private String FILE_PATH = System.getenv("MVOD_RESOURCE_HOME");
+		private String FILE_PATH = FileUtils.getClassPath();
+//	private String FILE_PATH = System.getenv("MVOD_RESOURCE_HOME");
 	private Logger logger = LoggerFactory.getLogger(FileController.class);
-	private String VIDEO_PATH = FILE_PATH + "/upload/videos";
-	private String IMAGE_PATH = FILE_PATH + "/upload/images";
-	private String VIDEO_TEMP_PATH = FILE_PATH + "/upload/videos/temp";
-	private String IMAGE_TEMP_PATH = FILE_PATH + "/upload/images/temp";
+	private String VIDEO_PATH = FILE_PATH + "static/upload/videos";
+	private String IMAGE_PATH = FILE_PATH + "static/upload/images";
+	private String VIDEO_TEMP_PATH = FILE_PATH + "static/upload/videos/temp";
+	private String IMAGE_TEMP_PATH = FILE_PATH + "static/upload/images/temp";
 	
-	public FileController() {
+	public FileController() throws FileNotFoundException {
 	}
 	
 	//	@PostMapping("/upload")

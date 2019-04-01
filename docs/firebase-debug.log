@@ -1,0 +1,116 @@
+[debug] [2019-03-31T11:54:37.899Z] ----------------------------------------------------------------------
+[debug] [2019-03-31T11:54:37.904Z] Command:       D:\Software\nodejs\node.exe C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\bin\firebase.js login --no-localhost --debug
+[debug] [2019-03-31T11:54:37.906Z] CLI Version:   6.5.0
+[debug] [2019-03-31T11:54:37.906Z] Platform:      win32
+[debug] [2019-03-31T11:54:37.906Z] Node Version:  v10.15.3
+[debug] [2019-03-31T11:54:37.910Z] Time:          Sun Mar 31 2019 19:54:37 GMT+0800 (GMT+08:00)
+[debug] [2019-03-31T11:54:37.910Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+[info] Visit this URL on any device to log in:
+[info] https://accounts.google.com/o/oauth2/auth?client_id=563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com&scope=email%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloudplatformprojects.readonly%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffirebase%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform&response_type=code&state=949519180&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob
+[info] 
+[debug] [2019-03-31T11:54:57.504Z] >>> HTTP REQUEST POST https://accounts.google.com/o/oauth2/token  
+
+[debug] [2019-03-31T11:55:18.525Z] Token Fetch Error: Error
+    at new FirebaseError (C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\error.js:9:18)
+    at Request._callback (C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\api.js:30:31)
+    at self.callback (C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\request\request.js:185:22)
+    at Request.emit (events.js:189:13)
+    at Request.EventEmitter.emit (domain.js:441:20)
+    at Request.onRequestError (C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\request\request.js:881:8)
+    at ClientRequest.emit (events.js:189:13)
+    at ClientRequest.EventEmitter.emit (domain.js:441:20)
+    at TLSSocket.socketErrorListener (_http_client.js:392:9)
+    at TLSSocket.emit (events.js:189:13)
+[error] 
+[error] Error: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2019-03-31T11:57:20.394Z] ----------------------------------------------------------------------
+[debug] [2019-03-31T11:57:20.400Z] Command:       D:\Software\nodejs\node.exe C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\bin\firebase.js login --no-localhost --debug
+[debug] [2019-03-31T11:57:20.401Z] CLI Version:   6.5.0
+[debug] [2019-03-31T11:57:20.402Z] Platform:      win32
+[debug] [2019-03-31T11:57:20.402Z] Node Version:  v10.15.3
+[debug] [2019-03-31T11:57:20.405Z] Time:          Sun Mar 31 2019 19:57:20 GMT+0800 (GMT+08:00)
+[debug] [2019-03-31T11:57:20.405Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+[info] Visit this URL on any device to log in:
+[info] https://accounts.google.com/o/oauth2/auth?client_id=563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com&scope=email%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloudplatformprojects.readonly%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffirebase%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform&response_type=code&state=253444490&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob
+[info] 
+[debug] [2019-03-31T11:57:39.087Z] >>> HTTP REQUEST POST https://accounts.google.com/o/oauth2/token  
+
+[debug] [2019-03-31T11:58:00.099Z] Token Fetch Error: Error
+    at new FirebaseError (C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\error.js:9:18)
+    at Request._callback (C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\api.js:30:31)
+    at self.callback (C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\request\request.js:185:22)
+    at Request.emit (events.js:189:13)
+    at Request.EventEmitter.emit (domain.js:441:20)
+    at Request.onRequestError (C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\request\request.js:881:8)
+    at ClientRequest.emit (events.js:189:13)
+    at ClientRequest.EventEmitter.emit (domain.js:441:20)
+    at TLSSocket.socketErrorListener (_http_client.js:392:9)
+    at TLSSocket.emit (events.js:189:13)
+[error] 
+[error] Error: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2019-03-31T11:59:50.710Z] ----------------------------------------------------------------------
+[debug] [2019-03-31T11:59:50.715Z] Command:       D:\Software\nodejs\node.exe C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\bin\firebase.js login --no-localhost --debug
+[debug] [2019-03-31T11:59:50.716Z] CLI Version:   6.5.0
+[debug] [2019-03-31T11:59:50.716Z] Platform:      win32
+[debug] [2019-03-31T11:59:50.717Z] Node Version:  v10.15.3
+[debug] [2019-03-31T11:59:50.719Z] Time:          Sun Mar 31 2019 19:59:50 GMT+0800 (GMT+08:00)
+[debug] [2019-03-31T11:59:50.720Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+[info] Visit this URL on any device to log in:
+[info] https://accounts.google.com/o/oauth2/auth?client_id=563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com&scope=email%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloudplatformprojects.readonly%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffirebase%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform&response_type=code&state=1040525611&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob
+[info] 
+[debug] [2019-03-31T12:00:04.870Z] >>> HTTP REQUEST POST https://accounts.google.com/o/oauth2/token  
+
+[debug] [2019-03-31T12:00:25.879Z] Token Fetch Error: Error
+    at new FirebaseError (C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\error.js:9:18)
+    at Request._callback (C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\api.js:30:31)
+    at self.callback (C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\request\request.js:185:22)
+    at Request.emit (events.js:189:13)
+    at Request.EventEmitter.emit (domain.js:441:20)
+    at Request.onRequestError (C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\request\request.js:881:8)
+    at ClientRequest.emit (events.js:189:13)
+    at ClientRequest.EventEmitter.emit (domain.js:441:20)
+    at TLSSocket.socketErrorListener (_http_client.js:392:9)
+    at TLSSocket.emit (events.js:189:13)
+[error] 
+[error] Error: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2019-03-31T12:05:10.653Z] ----------------------------------------------------------------------
+[debug] [2019-03-31T12:05:10.659Z] Command:       D:\Software\nodejs\node.exe C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\bin\firebase.js login --no-localhost --debug
+[debug] [2019-03-31T12:05:10.661Z] CLI Version:   6.5.0
+[debug] [2019-03-31T12:05:10.661Z] Platform:      win32
+[debug] [2019-03-31T12:05:10.662Z] Node Version:  v10.15.3
+[debug] [2019-03-31T12:05:10.664Z] Time:          Sun Mar 31 2019 20:05:10 GMT+0800 (GMT+08:00)
+[debug] [2019-03-31T12:05:10.665Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+[info] Visit this URL on any device to log in:
+[info] https://accounts.google.com/o/oauth2/auth?client_id=563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com&scope=email%20openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloudplatformprojects.readonly%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Ffirebase%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform&response_type=code&state=509756674&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob
+[info] 
+[debug] [2019-03-31T12:05:23.197Z] >>> HTTP REQUEST POST https://accounts.google.com/o/oauth2/token  
+
+[debug] [2019-03-31T12:05:44.216Z] Token Fetch Error: Error
+    at new FirebaseError (C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\error.js:9:18)
+    at Request._callback (C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\firebase-tools\lib\api.js:30:31)
+    at self.callback (C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\request\request.js:185:22)
+    at Request.emit (events.js:189:13)
+    at Request.EventEmitter.emit (domain.js:441:20)
+    at Request.onRequestError (C:\Users\festc\AppData\Local\Yarn\Data\global\node_modules\request\request.js:881:8)
+    at ClientRequest.emit (events.js:189:13)
+    at ClientRequest.EventEmitter.emit (domain.js:441:20)
+    at TLSSocket.socketErrorListener (_http_client.js:392:9)
+    at TLSSocket.emit (events.js:189:13)
+[error] 
+[error] Error: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
